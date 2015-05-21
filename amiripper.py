@@ -29,44 +29,43 @@ class amiripper:
         """
         Initializes all the variables
         """
-        amiripper.getNumberOfPages
         amiripper.outputFolder = outputFolder
-        amiripper.populatePageUrls(self)
+        amiripper.getNumberOfPages()
+        amiripper.populatePageUrls()
 
-    def getNumberOfPages(self):
+    def getNumberOfPages():
         """
         Figures out how many pages there are to download from
         """
         r = requests.get(amiripper.baseUrl)
         soup = BeautifulSoup(r.text)
         selects = soup.find('select', attrs={'name': 'page'})
-        amiripper.numberOfPages = len(selects.find_all('option')))
+        amiripper.numberOfPages = len(selects.find_all('option'))
 
-    def populatePageUrls(self):
+    def populatePageUrls():
         """
         Populates the url-list
         """
-        for page in range(1, pages):
-            amiripper.pageUrls.append(amiripper.baseUrl + str(page))
+        for page in range(amiripper.numberOfPages):
+            # Since range starts at 0, add 1
+            amiripper.pageUrls.append(amiripper.baseUrl + str(page+1))
 
     def getSongUrls(self):
         """
         Gets all the URLs for the songs
         """
-        #for page in amiripper.pageUrls:
-        r = requests.get(amiripper.pageUrls[0])
-        htmlSource = r.text
-        soup = BeautifulSoup(htmlSource)
-        hrefs = [td.find('a',class_='remix') for td in soup.findAll('td',class_='c1')]
-
-        for tag in hrefs:
-            print(amiripper.baseUrl + str(tag["href"]))
+        for page in amiripper.pageUrls:
+            r = requests.get(page)
+            htmlSource = r.text
+            soup = BeautifulSoup(htmlSource)
+            hrefs = [td.find('a',class_='remix') for td in soup.findAll('td',class_='c1')]
+            for tag in hrefs:
+                print(amiripper.baseUrl + str(tag["href"]))
 
 
 
 def main(argv):
     ripper = amiripper(sys.argv[1])
-    ripper.getNumberOfPages()
 
 if __name__ == '__main__':
     if (len(sys.argv)) is not 2:
