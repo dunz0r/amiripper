@@ -15,6 +15,7 @@ __author__ = 'Gabriel Fornaeus'
 __version__ = '0.1'
 
 from bs4 import BeautifulSoup
+from time import sleep
 import requests
 import sys
 
@@ -32,6 +33,7 @@ class amiripper:
         amiripper.outputFolder = outputFolder
         amiripper.getNumberOfPages()
         amiripper.populatePageUrls()
+        amiripper.getSongUrls()
 
     def getNumberOfPages():
         """
@@ -50,7 +52,7 @@ class amiripper:
             # Since range starts at 0, add 1
             amiripper.pageUrls.append(amiripper.baseUrl + str(page+1))
 
-    def getSongUrls(self):
+    def getSongUrls():
         """
         Gets all the URLs for the songs
         """
@@ -60,12 +62,13 @@ class amiripper:
             soup = BeautifulSoup(htmlSource)
             hrefs = [td.find('a',class_='remix') for td in soup.findAll('td',class_='c1')]
             for tag in hrefs:
-                print(amiripper.baseUrl + str(tag["href"]))
+                amiripper.songUrls.append(amiripper.baseUrl + str(tag["href"]))
 
 
 
 def main(argv):
     ripper = amiripper(sys.argv[1])
+    print(ripper.songUrls)
 
 if __name__ == '__main__':
     if (len(sys.argv)) is not 2:
