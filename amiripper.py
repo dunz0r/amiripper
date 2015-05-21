@@ -6,11 +6,30 @@
 #
 # Distributed under terms of the GPLv3 license.
 
-"""
-A small program which downloads all songs from http://amigaremix.com
+"""A small program which downloads all songs from http://amigaremix.com
+
+Very simple, but very complex at the same time :)
 """
 
+__author__ = 'Gabriel Fornaeus'
+__version__ = '0.1'
+
+import requests
 import sys
+
+class amiripper(url):
+    urls = []
+    def __init__(self, urls):
+        populateUrls(url)
+
+    def populateUrls(self, url):
+        """
+        Populates the url-list
+        Keyword arguments:
+        url -- the base url to use
+        """
+        for page in range(1, 64):
+            amiripper.urls[page] = "http://amigaremix.com/remixes/%s" % page
 
 def main(argv):
     outputFolder = argv
