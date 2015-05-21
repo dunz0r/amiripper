@@ -23,18 +23,30 @@ class amiripper:
     outputFolder = ''
     pageUrls = []
     songUrls = []
+    numberOfPages = 0
+
     def __init__(self, outputFolder):
         """
         Initializes all the variables
         """
+        amiripper.getNumberOfPages
         amiripper.outputFolder = outputFolder
         amiripper.populatePageUrls(self)
+
+    def getNumberOfPages(self):
+        """
+        Figures out how many pages there are to download from
+        """
+        r = requests.get(amiripper.baseUrl)
+        soup = BeautifulSoup(r.text)
+        selects = soup.find('select', attrs={'name': 'page'})
+        amiripper.numberOfPages = len(selects.find_all('option')))
 
     def populatePageUrls(self):
         """
         Populates the url-list
         """
-        for page in range(1, 64):
+        for page in range(1, pages):
             amiripper.pageUrls.append(amiripper.baseUrl + str(page))
 
     def getSongUrls(self):
@@ -46,6 +58,7 @@ class amiripper:
         htmlSource = r.text
         soup = BeautifulSoup(htmlSource)
         hrefs = [td.find('a',class_='remix') for td in soup.findAll('td',class_='c1')]
+
         for tag in hrefs:
             print(amiripper.baseUrl + str(tag["href"]))
 
@@ -53,7 +66,7 @@ class amiripper:
 
 def main(argv):
     ripper = amiripper(sys.argv[1])
-    ripper.getSongUrls()
+    ripper.getNumberOfPages()
 
 if __name__ == '__main__':
     if (len(sys.argv)) is not 2:
