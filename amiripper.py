@@ -19,21 +19,24 @@ from time import sleep
 import requests
 import sys
 
+
+def shellEscape(s):
+    return s.replace("(","\\(").replace(")","\\)").replace(" ","\\ ")
+
 class amiripper:
     baseUrl = 'http://amigaremix.com/'
-    outputFolder = ''
     pageUrls = []
     songUrls = []
     numberOfPages = 0
 
-    def __init__(self, outputFolder):
+    def __init__(self):
         """
         Initializes all the variables
         """
-        amiripper.outputFolder = outputFolder
         amiripper.getNumberOfPages()
         amiripper.populatePageUrls()
         amiripper.getSongUrls()
+        amiripper.downloadSongs()
 
     def getNumberOfPages():
         """
@@ -52,6 +55,21 @@ class amiripper:
             # Since range starts at 0, add 1
             amiripper.pageUrls.append(amiripper.baseUrl + str(page+1))
 
+    def downloadSongs():
+        """
+        Downloads a song and saves it with the correct filename
+        """
+        for index,song in enumerate(amiripper.songUrls):
+            r = requests.get(song, stream=True)
+            localFilename = song.split('/')[-1].replace("%20", " ")
+            with open(localFilename, 'wb') as f:
+                for chunk in r.iter_content(chunk_size=1024):
+                    if chunk: # filter out keep-alive new chunks
+                        f.write(chunk)
+                        f.flush()
+            print("%d of %d: %s" % (index+1, len(amiripper.songUrls), localFilename))
+
+
     def getSongUrls():
         """
         Gets all the URLs for the songs
@@ -66,11 +84,10 @@ class amiripper:
 
 
 
-def main(argv):
-    ripper = amiripper(sys.argv[1])
-    print(ripper.songUrls)
+def main():
+    ripper = amiripper()
 
 if __name__ == '__main__':
-    if (len(sys.argv)) is not 2:
-        sys.exit("Usage %s <destination-folder>" % sys.argv[0])
-    main(sys.argv[1])
+    if (len(sys.argv)) is not 1:
+        sys.exit("Usage %s" % sys.argv[0])
+    main()
