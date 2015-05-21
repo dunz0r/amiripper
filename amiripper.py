@@ -20,20 +20,23 @@ import sys
 class amiripper:
     baseUrl = 'http://amigaremix.com/'
     outputFolder = ''
-    urls = []
+    pageUrls = []
     def __init__(self, outputFolder):
+        """
+        Initializes all the variables
+        """
         amiripper.outputFolder = outputFolder
-        amiripper.populateUrls(self)
+        amiripper.populatePageUrls(self)
 
-    def populateUrls(self):
+    def populatePageUrls(self):
         """
         Populates the url-list
         Keyword arguments:
         url -- the base url to use
         """
         for page in range(1, 64):
-            amiripper.urls.insert(page, amiripper.baseUrl + str(page))
-        print(amiripper.urls)
+            amiripper.pageUrls.insert(page, amiripper.baseUrl + str(page))
+        print(amiripper.pageUrls)
 
 def main(argv):
     ripper = amiripper(sys.argv[1])
