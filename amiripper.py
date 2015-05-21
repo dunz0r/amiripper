@@ -17,22 +17,26 @@ __version__ = '0.1'
 import requests
 import sys
 
-class amiripper(url):
+class amiripper:
+    baseUrl = 'http://amigaremix.com/'
+    outputFolder = ''
     urls = []
-    def __init__(self, urls):
-        populateUrls(url)
+    def __init__(self, outputFolder):
+        amiripper.outputFolder = outputFolder
+        amiripper.populateUrls(self)
 
-    def populateUrls(self, url):
+    def populateUrls(self):
         """
         Populates the url-list
         Keyword arguments:
         url -- the base url to use
         """
         for page in range(1, 64):
-            amiripper.urls[page] = "http://amigaremix.com/remixes/%s" % page
+            amiripper.urls.insert(page, amiripper.baseUrl + str(page))
+        print(amiripper.urls)
 
 def main(argv):
-    outputFolder = argv
+    ripper = amiripper(sys.argv[1])
 
 if __name__ == '__main__':
     if (len(sys.argv)) is not 2:
