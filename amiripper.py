@@ -9,3 +9,13 @@
 """
 A small program which downloads all songs from http://amigaremix.com
 """
+
+import sys
+
+def main(argv):
+    outputFolder = argv
+
+if __name__ == '__main__':
+    if (len(sys.argv)) is not 2:
+        sys.exit("Usage %s <destination-folder>" % sys.argv[0])
+    main(sys.argv[1])
